@@ -1,0 +1,11 @@
+#!/bin/sh
+# tt_debug.lua extension should be loaded for this to work
+# e.g. ttserver -ext $(pwd)/tt_debug.lua
+
+thost=$1 # host to connect
+tport=$2 # tyrant port
+rport=$3 # repl port
+
+tcrmgr ext -port ${tport:=1978} ${thost:=localhost} repl ${rport:=1999} &
+sleep 0.1
+exec nc ${thost:=localhost} ${rport:=1999}
