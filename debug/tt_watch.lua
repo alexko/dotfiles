@@ -21,7 +21,7 @@ if arg and arg[0] and #arg[0] > 0 then
    end
 
    func = arg[1] or "'return gcinfo(), _time()'"
-   port = arg[2] or "2000"
+   port = arg[2] or "1978"
    args = { "tcrmgr", "ext", "-port", port, "localhost", "teval", func, "2>/dev/null" }
    io.write(esc("2J") .. esc("0;1H") .. "= " .. func)
    while true do tt_watch(args) end
