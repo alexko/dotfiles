@@ -1,0 +1,30 @@
+Simple debugging/monitoring tools for Lua extensions of Tokyo Tyrant
+
+USAGE
+
+ttserver -port 2000 -ext $(pwd)/tt_debug.lua
+(or require "tt_debug" in your lua extension)
+
+== Lua repl
+
+./tt_lua localhost 2000
+th_6> _thid, gcinfo()
+[6,236]
+th_6> ^C
+th_6 repl finished!
+
+TODO
+0. repl io redirection for print() ? need convertor btw socket and file for this?
+1. maybe there is an option in json.encode to not quote strings?
+2. Add help for tyrant api functions and their parameters or even autocompletion?
+3. support for multi-line commands
+
+== Lua threads memory usage monitoring
+
+./tt_watch.lua
+
+TODO
+0. use tyrant binary protocol instead of tcrmgr
+1. concurrent requests
+2. tt_watch() output stats about rpc/sec
+3. latency per lua thread?
