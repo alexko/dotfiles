@@ -14,10 +14,10 @@ local function _repr(res, noquote)
    if success then
       if #res == 1 then
          if noquote and type(res[1]) == "string" then return res[1] end
-         return json.encode(res[1])
-      else
-         return json.encode(res)
+         res = res[1]
       end
+      success, res = pcall(function() return json.encode(res) end)
+      return res
    else
       return table.concat(res,"\n")
    end
