@@ -23,16 +23,25 @@ local function _repr(res, noquote)
    end
 end
 
-local function _teval(line)
+local function _teval(line, client)
+   local print0 = print
+   print = function(...)
+                    if not client then return end
+                    local res = {}      
+                    for i, v in ipairs(arg) do
+                       table.insert(res, tostring(v))
+                    end
+                    client:send(table.concat(res,"\t") .. "\n")
+                 end 
    local res = { loadstring("return ".. line) }
    if not res[1] then -- syntax
       res = { loadstring(line) }
    end
    if res[1] then
-      return { xpcall(res[1],debug.traceback) }
-   else
-      return res
-   end
+      res = { xpcall(res[1],debug.traceback) }
+      print = print0
+   end  
+   return res
 end
 
 function teval(key, val)
@@ -51,7 +60,8 @@ function repl(port, prompt)
          local line, err = client:receive()
          if line then
             _log("th_" .. _thid .. " rcvd:" .. line)
-            client:send(_repr(_teval(line)) .. "\n")
+            local res = _teval(line, client)
+            if #res>1 then client:send(_repr(res) .. "\n") end
             client:send(_repr(_teval(prompt), true))
          else
             if err ~= "timeout" then

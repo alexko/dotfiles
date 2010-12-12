@@ -14,10 +14,9 @@ th_6> ^C
 th_6 repl finished!
 
 TODO
-0. repl io redirection for print() ? need convertor btw socket and file for this?
-1. maybe there is an option in json.encode to not quote strings?
-2. Add help for tyrant api functions and their parameters or even autocompletion?
-3. support for multi-line commands
+0. maybe there is an option in json.encode to not quote strings?
+1. support for multi-line commands
+2. Autocompletion?
 
 == Lua threads memory usage monitoring
 
