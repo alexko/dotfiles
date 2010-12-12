@@ -1,0 +1,10 @@
+#!/usr/bin/env zsh
+
+for f in .zshrc .screenrc
+do
+  [ ~/$f -ef $(pwd)/$f ] || {
+    echo symlinking $f 
+    [ -e ~/$f ] && mv ~/$f ~/$f.$(date +%Y%m%d%H%M%S)
+    ln -s $(pwd)/$f ~/$f
+  }
+done
