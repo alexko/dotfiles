@@ -1,0 +1,255 @@
+#compdef tcrmgr
+
+typeset -A opt_args
+
+_tcrmgr() {
+  local extra
+
+  _arguments \
+    '*::tcrmgr command:_tcrmgr_command'
+}
+
+# tcrmgr command dispatch function
+
+(( $+functions[_tcrmgr_command] )) ||
+_tcrmgr_command() {
+  local cmd thost=localhost tport=1978 ret=1
+  [[ -n "$opt_args[-port]" ]] && tport=$opt_args[-port]
+
+  # change this to retrieve commands from tcrmgr help
+  (( $+_tcrmgr_cmds )) || _tcrmgr_cmds=(
+    ${${(f)"$(_call_program commands tcrmgr help 2>&1)"}[3,-1]/(#b) #([a-z]##) #([a-z]##) #([[a-z]#)/$match[2]:${match[3]:-none}}
+  )
+
+  if (( CURRENT == 1 )); then
+    _describe -t commands 'tcrmgr command' _tcrmgr_cmds || compadd "$@" ${(s.:.)${(j.:.)_tcrmgr_syns}}
+  else
+    local cucontext="${curcontext}"
+    cmd="${${_tcrmgr_cmds[(r)$words[1]:*]%%:*}}"
+    if (( $#cmd )); then
+      curcontext="${curcontext%:*:*}:tcrmgr-${cmd}:"
+      _call_function ret _tcrmgr_$cmd || _message "no more arguments"
+    else
+      _message "unknown tcrmgr command: $words[1]"
+    fi
+    return ret
+  fi
+}
+
+# helper functions
+_lports () {
+  lports=( $(pgrep -lf ttserver | sed -n 's/.*-port \([0-9]*\).*/\1/p') )
+  compadd $lports
+}
+
+_seps () {
+  seps=("/" "," "\t")
+  compadd $seps
+}
+
+_lexts () {
+  lext=( $(tcrmgr ext -port $1 localhost ext_list 2>/dev/null) )
+  compadd $lext
+}
+
+_lkeys () {
+  lkeys=( $(tcrmgr list localhost 2>/dev/null) )
+  compadd $lkeys
+}
+
+_thost () {
+  compadd localhost
+}
+
+_tsv_files() {
+  _description files expl 'tsv files'
+  _files "$expl[@]" -g '^*.[tT][sS][vV]'
+}
+
+_misc () {
+  misc=(put putkeep putcat putdup putdupback putlist get getlist getpart out outlist iterinit iternext
+    sync optimize vanish regex range error defrag cacheclear setindex search metasearch
+    addcond cond setorder order setlimit limit setmax max columns get next mstype remove count hint)
+  compadd $misc
+}
+
+# completion functions for each tcrmgr command
+
+(( $+functions[_tcrmgr_inform] )) ||
+_tcrmgr_inform() {
+  _arguments \
+    '-port+[port to connect]:port:_lports' \
+    '-st[print status data]'
+}
+
+(( $+functions[_tcrmgr_put] )) ||
+_tcrmgr_put() {
+  _arguments \
+    "-port+[port to connect]:port:_lports" \
+    "-sx[input as hex string]" \
+    "-sep+[separator]:sep:_seps" \
+    "(     -dc -dai -dad)-dk[putkeep]" \
+    "(-dk      -dai -dad)-dc[putcat]" \
+    "(-dk  -dc      -dad)-dai[add int]" \
+    "(-dk  -dc -dai     )-dad[add double]" \
+    "-ds+[number]:($(seq 20))" \
+    "(-):thost:_thost" \
+    ":key:" \
+    ":value:"
+}
+
+(( $+functions[_tcrmgr_out] )) ||
+_tcrmgr_out() {
+  _arguments \
+    "-port+[port to connect]:port:_lports" \
+    "-sx[input as hex string]" \
+    "-sep+[separator]:sep:_seps" \
+    "(-):thost:_thost" \
+    ":key:_lkeys"
+}
+
+(( $+functions[_tcrmgr_get] )) ||
+_tcrmgr_get() {
+  _arguments \
+    "-port+[port to connect]:port:_lports" \
+    "-sx[input as hex string]" \
+    "-sep+[separator]:sep:_seps" \
+    "-px[output hex]" \
+    "-pz[don't append LF at the end of the output]" \
+    "(-):thost:_thost" \
+    ":key:_lkeys"
+}
+
+(( $+functions[_tcrmgr_mget] )) ||
+_tcrmgr_mget() {
+  _arguments \
+    "-port+[port to connect]:port:_lports" \
+    "-sx[input as hex string]" \
+    "-sep+[separator]:sep:_seps" \
+    "-px[output hex]" \
+    "-pz[don't append LF at the end of the output]" \
+    "(-):thost:_thost" \
+    "*:key:_lkeys"
+}
+
+(( $+functions[_tcrmgr_list] )) ||
+_tcrmgr_list() {
+  _arguments \
+    "-port+[port to connect]:port:_lports" \
+    '-sep+[separator]:sep:_seps' \
+    "-m+[maximum number of rows to output]" \
+    '-pv[print values]' \
+    "-px[output hex]" \
+    "-fm+[prefix]" \
+    '(-):thost:_thost'
+}
+
+(( $+functions[_tcrmgr_ext] )) ||
+_tcrmgr_ext() {
+  typeset -A opt_args
+  _arguments \
+    '-port+[port to connect]:port:_lports' \
+    "(-xlg)-xlr[record locking]" \
+    "(-xlr)-xlg[global locking]" \
+    '-sep+[separator]:sep:_seps' \
+    "-px[output hex]" \
+    '(-):thost:_thost' \
+    ':ext: _lexts ${~opt_args[-port]\:-1978}'
+}
+
+(( $+functions[_tcrmgr_sync] )) ||
+_tcrmgr_sync() {
+  _arguments \
+    "-port+[port to connect]:port:_lports" \
+    "(-):thost:_thost"
+}
+
+(( $+functions[_tcrmgr_optimize] )) ||
+_tcrmgr_optimize() {
+  _arguments \
+    "-port+[port to connect]:port:_lports" \
+    "(-):thost:_thost" \
+    ":params:"
+}
+
+(( $+functions[_tcrmgr_vanish] )) ||
+_tcrmgr_vanish() {
+  _arguments \
+    "-port+[port to connect]:port:_lports" \
+    "(-):thost:_thost"
+}
+
+(( $+functions[_tcrmgr_copy] )) ||
+_tcrmgr_copy() {
+  _arguments \
+    "-port+[port to connect]:port:_lports" \
+    "(-):thost:_thost" \
+    ":dpath:"
+}
+
+(( $+functions[_tcrmgr_misc] )) ||
+_tcrmgr_misc() {
+  _arguments \
+    '-port+[port to connect]:port:_lports' \
+    "-mnu[omit the update log]" \
+    "-sx[input as hex string]" \
+    "-sep+[separator]:sep:_seps" \
+    "-px[output hex]" \
+    '(-):thost:_thost' \
+    ':fnc:_misc' \
+    "*:arg:"
+}
+
+(( $+functions[_tcrmgr_importtsv] )) ||
+_tcrmgr_importtsv() {
+  _arguments \
+    "-port+[port to connect]:port:_lports" \
+    "-nr[use tcrdbputnr]" \
+    "-sc[normalize keys to lower case]" \
+    "(-):thost:_thost" \
+    ":file:_tsv_files"
+}
+
+(( $+functions[_tcrmgr_restore] )) ||
+_tcrmgr_restore() {
+  _arguments \
+    "-port+[port to connect]:port:_lports" \
+    "-ts+[specify the beginning timestamp]" \
+    "-rcc[check consistency of replication]" \
+    "(-):thost:_thost" \
+    ":upath:"
+}
+
+(( $+functions[_tcrmgr_setmst] )) ||
+_tcrmgr_setmst() {
+  _arguments \
+    "-port+[port to connect]:port:_lports" \
+    "-mport+[master port to connect]:port:_lports" \
+    "-ts+[specify the beginning timestamp]" \
+    "-rcc[check consistency of replication]" \
+    "(-):thost:_thost" \
+    ":mhost:_thost"
+}
+
+(( $+functions[_tcrmgr_repl] )) ||
+_tcrmgr_repl() {
+  _arguments \
+    "-port+[port to connect]:port:_lports" \
+    "-ts+[specify the beginning timestamp]" \
+    "-sid+[specify the self server ID" \
+    "-ph[print human-readable data]" \
+    "(-):thost:_thost"
+}
+
+(( $+functions[_tcrmgr_http] )) ||
+_tcrmgr_http() {
+  _arguments \
+    "-ih[outpit headers]" \
+    "-ah+[add a request header <name> <value>]" \
+    "*:url:_url"
+}
+
+(( $+functions[_tcrmgr_version] )) ||
+_tcrmgr_version() return 0
+
+_tcrmgr "$@"
