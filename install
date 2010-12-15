@@ -1,10 +1,10 @@
 #!/usr/bin/env zsh
 
-for f in .zshrc .screenrc
+for f in .zshrc .screenrc .emacs.d .vim .vim/.vimrc
 do
   [ ~/$f -ef $(pwd)/$f ] || {
     echo symlinking $f 
-    [ -e ~/$f ] && mv ~/$f ~/$f.$(date +%Y%m%d%H%M%S)
-    ln -s $(pwd)/$f ~/$f
+    [ -e ~/$f:t ] && mv ~/$f:t ~/$f:t.$(date +%Y%m%d%H%M%S)
+    ln -s $(pwd)/$f ~/$f:t
   }
 done

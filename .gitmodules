@@ -1,0 +1,6 @@
+[submodule ".vimrc"]
+	path = .vimrc
+	url = git@github.com:alexko/vimsetup.git
+[submodule ".emacs.d"]
+	path = .emacs.d
+	url = git@github.com:alexko/emacs-starter-kit.git
