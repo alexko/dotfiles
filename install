@@ -1,5 +1,7 @@
 #!/usr/bin/env zsh
 
+git submodule init
+git submodule update
 for f in .zshrc .screenrc .emacs.d .vim .vim/.vimrc
 do
   [ ~/$f -ef $(pwd)/$f ] || {
