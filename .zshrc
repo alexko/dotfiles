@@ -83,7 +83,10 @@ alias m=less
 alias e='emacs -nw'
 ec () emacsclient -c "$@"
 ec_start () emacs --daemon
-ec_stop () emacsclient --eval "(progn (setq kill-emacs-hook 'nil) (kill-emacs))"
+ec_stop () {
+  emacsclient --eval "(progn (setq kill-emacs-hook 'nil) (kill-emacs))";
+  rm -f ~/.emacs.desktop.lock
+}
 alias xml=xmlstarlet
 alias adb="/home/alkos/android/android-sdk-linux_86/tools/adb -d"
 function dupscreen { screen bash -c "cd \"$PWD\" && exec $SHELL --login" }
