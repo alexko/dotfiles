@@ -58,6 +58,9 @@ if [ "$TERM" != "dumb" ]; then
 #  PROMPT="$prompt_host:$prompt_cwd %# "
   PROMPT="$prompt_user%B@%b$prompt_host:$prompt_cwd %# "
   RPROMPT="$prompt_ecode$prompt_time"
+# Make right Alt key to work as Meta
+  # xmodmap -e "keysym ISO_Level3_Shift = Meta_R"
+  xmodmap -e "keycode 92 = Meta_R"
 fi
 
 export LUA_INIT=@$HOME/bin/init.lua
