@@ -6,7 +6,7 @@ for f in .zshrc .screenrc .emacs.d .vim .vim/.vimrc
 do
   [ ~/$f:t -ef $(pwd)/$f ] || {
     echo symlinking $f 
-    [ -e ~/$f:t ] && mv ~/$f:t ~/$f:t.$(date +%Y%m%d%H%M%S)
+    [ -e ~/$f:t -o -h ~/$f:t ] && mv ~/$f:t ~/$f:t.$(date +%Y%m%d%H%M%S)
     ln -s $(pwd)/$f ~/$f:t
   }
 done
