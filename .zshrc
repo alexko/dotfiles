@@ -31,6 +31,7 @@ setopt extended_glob # enables ^x x~y x# x##
 setopt extended_history
 
 if [ "$TERM" != "dumb" ]; then
+  export TERM=xterm-256color
   if [ -x /usr/bin/dircolors ]; then
     eval "$(dircolors)"
     alias ls='ls -F --color=auto'
