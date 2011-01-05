@@ -82,6 +82,7 @@ alias m=less
 #alias m=make
 alias e='emacs -nw'
 ec () emacsclient -c "$@"
+ec_remember () emacsclient -e '(remember-other-frame)'
 ec_start () emacs --daemon
 ec_stop () {
   emacsclient --eval "(progn (setq kill-emacs-hook 'nil) (kill-emacs))";
