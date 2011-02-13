@@ -97,7 +97,7 @@ alias mk_cm='for h in face dev sun alex1; do ssh -MNf $h; done'
 alias rm_cm='pkill -f "ssh -MNf"'
 alias relcom='f=(~/.zsh/*(.)); unfunction $f:t; autoload -U ~/.zsh/*(:t)'
 
-# umask 0066
+umask 0066
 
 [ -r ~/.zshrc.local ] && source ~/.zshrc.local
 [ -x /usr/bin/calendar ] && /usr/bin/calendar
