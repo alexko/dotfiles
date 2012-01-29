@@ -82,7 +82,7 @@ alias g=grep
 alias m=less
 #alias m=make
 alias e='emacs -nw'
-ec () emacsclient -c "$@"
+ec () emacsclient -a $EDITOR -c "$@"
 ec_remember () emacsclient -e '(remember-other-frame)'
 ec_start () emacs --daemon
 ec_stop () {
