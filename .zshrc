@@ -77,11 +77,19 @@ unset http_proxy
 # aliases
 alias ll='ls -l'
 alias la='ls -A'
+alias lr='ls -ltr'
 alias l='ls -CF'
 alias g=grep
-alias m=less
-#alias m=make
+alias m=make
 alias e='emacs -nw'
+alias -g G='| grep -'
+alias -g L='| less'
+alias -g W='| wc -l'
+alias -s mp3='mpg123 -q'
+for ext in doc xls pdf; do alias -s $ext=gnome-open; done
+for ext in jpeg jpg png; do alias -s $ext=eog; done
+for ext in flv mp4; do alias -s $ext='mplayer -quiet'; done
+
 ec () emacsclient -a $EDITOR -c "$@"
 ec_remember () emacsclient -e '(remember-other-frame)'
 ec_start () emacs --daemon
