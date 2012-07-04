@@ -65,7 +65,7 @@ if [ "$TERM" != "dumb" ]; then
 fi
 
 export LUA_INIT=@$HOME/bin/init.lua
-export PAGER=less
+export PAGER="less -R"
 export EDITOR=vim
 export JAVA_HOME=/usr/lib/jvm/java-6-sun
 #export PATH=$PATH:/usr/local/cuda/bin:$JAVA_HOME/bin:$HOME/android/android-sdk-linux_86:$HOME/bin/gsutil
