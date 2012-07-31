@@ -98,7 +98,7 @@ ec_stop () {
   rm -f ~/.emacs.desktop.lock
 }
 alias xml=xmlstarlet
-alias adb="/home/alkos/android/android-sdk-linux_86/tools/adb -d"
+alias adb="~/android/android-sdk-linux/platform-tools/adb -d"
 function dupscreen { screen bash -c "cd \"$PWD\" && exec $SHELL --login" }
 alias ,d=dupscreen
 alias mk_cm='for h in face dev sun alex1; do ssh -MNf $h; done'
