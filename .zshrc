@@ -5,6 +5,8 @@ HISTSIZE=1000
 SAVEHIST=1000
 bindkey -e
 bindkey " " magic-space # history expansion on space
+bindkey '^[[A' up-line-or-search
+bindkey '^[[B' down-line-or-search
 stty -ixon # disable Ctrl-S/Ctrl-Q
 path=(~/bin /usr/local/cuda/bin ~/android/android-sdk-linux_86 ~/bin/gsutil $JAVA_HOME/bin ~/google_appengine $path)
 fpath=(~/.zsh $fpath)
