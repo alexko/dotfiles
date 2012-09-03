@@ -1,8 +1,8 @@
 #!/usr/bin/env zsh
 
 HISTFILE=~/.histfile
-HISTSIZE=1000
-SAVEHIST=1000
+HISTSIZE=30000
+SAVEHIST=30000
 bindkey -e
 bindkey " " magic-space # history expansion on space
 bindkey '^[[A' up-line-or-search
