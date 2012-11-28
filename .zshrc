@@ -95,10 +95,7 @@ for ext in flv mp4; do alias -s $ext='mplayer -quiet'; done
 ec () emacsclient -a $EDITOR -c "$@"
 ec_remember () emacsclient -e '(remember-other-frame)'
 ec_start () emacs --daemon
-ec_stop () {
-  emacsclient --eval "(progn (setq kill-emacs-hook 'nil) (kill-emacs))";
-  rm -f ~/.emacs.desktop.lock
-}
+ec_stop () emacsclient --eval "(kill-emacs)"
 alias xml=xmlstarlet
 alias adb="~/android/android-sdk-linux/platform-tools/adb -d"
 function dupscreen { screen bash -c "cd \"$PWD\" && exec $SHELL --login" }
