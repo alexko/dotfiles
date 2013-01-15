@@ -92,7 +92,7 @@ for ext in doc xls pdf; do alias -s $ext=gnome-open; done
 for ext in jpeg jpg png gif tiff; do alias -s $ext=eog; done
 for ext in flv mp4; do alias -s $ext='mplayer -quiet'; done
 
-ec () emacsclient -a $EDITOR -c "$@"
+ec () emacsclient -a $EDITOR "$@"
 ec_remember () emacsclient -e '(remember-other-frame)'
 ec_start () emacs --daemon
 ec_stop () emacsclient --eval "(kill-emacs)"
