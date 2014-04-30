@@ -108,5 +108,6 @@ alias pylab='ipython -pylab'
 umask 0066
 
 [ -r ~/.zshrc.local ] && source ~/.zshrc.local
-[ -x /usr/bin/calendar ] && /usr/bin/calendar
-
+if [ "$TERM" != "dumb" ]; then
+  [ -x /usr/bin/calendar ] && /usr/bin/calendar
+fi
