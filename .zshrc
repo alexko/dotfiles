@@ -8,7 +8,7 @@ bindkey " " magic-space # history expansion on space
 bindkey '^[[A' up-line-or-search
 bindkey '^[[B' down-line-or-search
 stty -ixon # disable Ctrl-S/Ctrl-Q
-path=(~/bin /usr/local/cuda/bin ~/android/android-sdk-linux_86 ~/bin/gsutil $JAVA_HOME/bin ~/google_appengine /usr/local/go/bin $path)
+path=(~/bin ~/.local/bin /usr/local/cuda/bin ~/android/android-sdk-linux_86 ~/bin/gsutil $JAVA_HOME/bin ~/google_appengine /usr/local/go/bin $path)
 fpath=(~/.zsh $fpath)
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
