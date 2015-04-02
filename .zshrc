@@ -71,10 +71,15 @@ export PAGER="less -R"
 export EDITOR=vim
 export JAVA_HOME=/usr/lib/jvm/java-6-sun
 #export PATH=$PATH:/usr/local/cuda/bin:$JAVA_HOME/bin:$HOME/android/android-sdk-linux_86:$HOME/bin/gsutil
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/lib
-export PYTHONPATH=$PYTHONPATH:$HOME/gsutil/boto
+if [ -d /usr/local/cuda ]; then
+  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/lib
+fi
+if [ -d $HOME/gsutil/boto ]; then
+  export PYTHONPATH=$PYTHONPATH:$HOME/gsutil/boto
+fi
 export PYLEARN2_DATA_PATH=$HOME/pylearn2/data
 export GOPATH=$HOME/tmp/go
+export COMPUTE=:0
 export alexko=1329486
 unset http_proxy
 
