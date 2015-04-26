@@ -93,6 +93,7 @@ alias l='ls -CF'
 alias g=grep
 alias m=make
 alias e='emacs -nw'
+alias tf='tail -F'
 alias -g G='| grep'
 alias -g L='| less'
 alias -g W='| wc -l'
