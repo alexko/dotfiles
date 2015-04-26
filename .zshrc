@@ -37,6 +37,7 @@ if [ "$TERM" != "dumb" ]; then
   if [ -x /usr/bin/dircolors ]; then
     eval "$(dircolors)"
     alias ls='ls -F --color=auto'
+    alias grep='grep --color=auto'
     zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
   fi
   if [ -x /usr/bin/lesspipe ]; then
