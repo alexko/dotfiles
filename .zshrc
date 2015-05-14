@@ -44,6 +44,10 @@ if [ "$TERM" != "dumb" ]; then
     eval "$(lesspipe)" # http://www.cyberciti.biz/tips/less-is-more-the-hidden-treasure-of-less-command.html
   fi
 
+  autoload edit-command-line
+  zle -N edit-command-line
+  bindkey '^Xe' edit-command-line
+
   autoload colors zsh/terminfo
   colors
   for color in red green blue yellow magenta cyan white; do
