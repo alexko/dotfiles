@@ -3,11 +3,11 @@
 git submodule init
 # if the main repo is cloned from read-only url rewrite submodule urls as read only
 if grep "git://github.com/alexko" .git/config; then
-  sed -i 's/git@github.com:alexko/git:\/\/github.com\/alexko/' .git/config
+  sed -ie 's/git@github.com:alexko/git:\/\/github.com\/alexko/' .git/config
 fi
 if grep "https://github.com/alexko" .git/config; then
-  sed -i 's/git@github.com:alexko/https:\/\/github.com\/alexko/' .git/config
-fi  
+  sed -ie 's/git@github.com:alexko/https:\/\/github.com\/alexko/' .git/config
+fi
 git submodule update
 
 for f in .zshrc .screenrc .emacs.d .vim .vim/.vimrc .calendar
