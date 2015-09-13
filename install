@@ -10,7 +10,7 @@ if grep "https://github.com/alexko" .git/config; then
 fi  
 git submodule update
 
-for f in .zshrc .screenrc .emacs.d .vim .vim/.vimrc
+for f in .zshrc .screenrc .emacs.d .vim .vim/.vimrc .calendar
 do
   [ ~/$f:t -ef $(pwd)/$f ] || {
     echo symlinking $f 
