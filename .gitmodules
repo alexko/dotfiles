@@ -1,6 +1,6 @@
 [submodule ".emacs.d"]
   path = .emacs.d
-  url = git@github.com:alexko/emacs-setup.git
+  url = https://github.com/alexko/emacs-setup.git
 [submodule ".vim"]
   path = .vim
-  url = git@github.com:alexko/vimsetup.git
+  url = https://github.com/alexko/vimsetup.git
