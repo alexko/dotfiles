@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-git update --init --recursive
+git submodule update --init --recursive
 
 for f in .zshrc .screenrc .emacs.d .vim .vim/.vimrc .calendar
 do
