@@ -10,3 +10,6 @@ do
     ln -s $(pwd)/$f ~/$f:t
   }
 done
+
+cd .emacs.d/vendor/pymacs
+make && python setup.py install --user
