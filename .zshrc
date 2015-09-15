@@ -12,7 +12,7 @@ path=(~/bin ~/.local/bin /usr/local/cuda/bin ~/android/android-sdk-linux_86 ~/bi
 fpath=(~/.zsh $fpath)
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
-zstyle :compinstall filename '/home/alkos/.zshrc'
+zstyle :compinstall filename ~/.zshrc
 
 autoload -Uz compinit
 compinit
@@ -125,4 +125,5 @@ umask 0066
 [ -r ~/.zshrc.local ] && source ~/.zshrc.local
 if [ "$TERM" != "dumb" ]; then
   [ -x /usr/bin/calendar ] && /usr/bin/calendar
+  [ -r ~/bin/z.sh ] && source ~/bin/z.sh
 fi

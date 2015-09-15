@@ -4,3 +4,6 @@
 [submodule ".vim"]
   path = .vim
   url = https://github.com/alexko/vimsetup.git
+[submodule "z"]
+	path = z
+	url = https://github.com/rupa/z.git

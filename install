@@ -11,5 +11,9 @@ do
   }
 done
 
+mkdir -p ~/bin
+ln -s $PWD/z/z.sh ~/bin/z.sh
+
 cd .emacs.d/vendor/pymacs
 make && python setup.py install --user
+
