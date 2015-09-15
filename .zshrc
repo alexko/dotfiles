@@ -39,6 +39,10 @@ if [ "$TERM" != "dumb" ]; then
     alias ls='ls -F --color=auto'
     alias grep='grep --color=auto'
     zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+  else
+    export CLICOLOR=1 # for bsd
+    export LSCOLORS=ExFxcxdxbxegedabagacad
+    # export LSCOLORS=exfxcxdxbxegedabagacad
   fi
   if [ -x /usr/bin/lesspipe ]; then
     eval "$(lesspipe)" # http://www.cyberciti.biz/tips/less-is-more-the-hidden-treasure-of-less-command.html
