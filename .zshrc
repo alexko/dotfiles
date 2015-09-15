@@ -125,5 +125,5 @@ umask 0066
 [ -r ~/.zshrc.local ] && source ~/.zshrc.local
 if [ "$TERM" != "dumb" ]; then
   [ -x /usr/bin/calendar ] && /usr/bin/calendar
-  [ -r ~/bin/z.sh ] && source ~/bin/z.sh
+  [ -r ~/bin/z.sh ] && source ~/bin/z.sh && HOME=$(readlink -f $HOME)
 fi
