@@ -1,8 +1,8 @@
 #!/usr/bin/env zsh
 
-git submodule update --init --recursive
+git submodule update --init .zsh .vim
 
-for f in .zshrc .screenrc .emacs.d .vim .vim/.vimrc .calendar
+for f in .zshrc .screenrc .vim .vim/.vimrc .calendar .emacs.d
 do
   [ ~/$f:t -ef $(pwd)/$f ] || {
     echo symlinking $f 
@@ -12,8 +12,17 @@ do
 done
 
 mkdir -p ~/bin
-ln -s $PWD/z/z.sh ~/bin/z.sh
+[ -r ~/bin/z.sh ] || ln -s $PWD/z/z.sh ~/bin/z.sh
 
-cd .emacs.d/vendor/pymacs
-make && python setup.py install --user
+case $1 in
+--full)
+        git submodule update --init --recursive
+        cd .emacs.d/vendor/pymacs
+        make && python setup.py install --user
+        ;;
+*)
+        echo "run install --full for emacs setup"
+        ;;
+esac
+
 
