@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-git submodule update --init .zsh .vim
+git submodule update --init .zsh .vim z
 
 for f in .zshrc .screenrc .vim .vim/.vimrc .calendar .emacs.d
 do
