@@ -10,3 +10,5 @@
         status = auto
         diff = auto
         branch = auto
+[rerere]
+        enabled = true
