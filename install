@@ -2,7 +2,7 @@
 
 git submodule update --init .zsh .vim z
 
-for f in .zshrc .screenrc .vim .vim/.vimrc .calendar .emacs.d
+for f in .zshrc .screenrc .gitconfig .vim .vim/.vimrc .calendar .emacs.d
 do
   [ ~/$f:t -ef $(pwd)/$f ] || {
     echo symlinking $f 

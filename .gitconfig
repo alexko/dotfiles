@@ -1,0 +1,12 @@
+[alias]
+        ci = commit
+        st = status
+        co = checkout
+        diffi = diff --cached
+        diffstat = diff --stat
+        diffw = diff --ignore-all-space
+        slog = log --pretty=oneline
+[color]
+        status = auto
+        diff = auto
+        branch = auto
