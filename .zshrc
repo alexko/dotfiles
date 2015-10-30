@@ -120,7 +120,7 @@ alias rm_cm='pkill -f "ssh -MNf"'
 alias relcom='f=(~/.zsh/*(.)); unfunction $f:t; autoload -U ~/.zsh/*(:t)'
 alias pylab='ipython -pylab'
 
-umask 0066
+umask 0027
 
 [ -r ~/.zshrc.local ] && source ~/.zshrc.local
 if [ "$TERM" != "dumb" ]; then
