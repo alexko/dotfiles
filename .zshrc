@@ -98,10 +98,13 @@ alias l='ls -CF'
 alias g=grep
 alias m=make
 alias e='emacs -nw'
+alias gvim='gvim --remote-tab-silent'
 alias tf='tail -F'
+alias hogs='ps aux --sort=-resident | head'
 alias -g G='| grep'
 alias -g L='| less'
 alias -g W='| wc -l'
+alias -g N='>/dev/null'
 alias -s mp3='mpg123 -q'
 for ext in doc xls pdf epub djvu; do alias -s $ext=gnome-open; done
 for ext in jpeg jpg png gif tiff; do alias -s $ext=eog; done
