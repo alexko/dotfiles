@@ -57,6 +57,10 @@ if [ "$TERM" != "dumb" ]; then
     eval "$(lesspipe)" # http://www.cyberciti.biz/tips/less-is-more-the-hidden-treasure-of-less-command.html
   fi
 
+  autoload zmv
+  alias zmv='noglob zmv -v'
+  alias zcp='noglob zmv -vC'
+
   autoload edit-command-line
   zle -N edit-command-line
   bindkey '^Xe' edit-command-line
