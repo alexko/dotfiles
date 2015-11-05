@@ -131,8 +131,6 @@ alias xml=xmlstarlet
 alias adb="~/android/android-sdk-linux/platform-tools/adb -d"
 function dupscreen { screen bash -c "cd \"$PWD\" && exec $SHELL --login" }
 alias ,d=dupscreen
-alias mk_cm='for h in face dev sun alex1; do ssh -MNf $h; done'
-alias rm_cm='pkill -f "ssh -MNf"'
 alias relcom='f=(~/.zsh/*(.)); unfunction $f:t; autoload -U ~/.zsh/*(:t)'
 alias pylab='ipython -pylab'
 
