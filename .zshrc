@@ -29,7 +29,7 @@ compinit
 zstyle ':completion:*' verbose yes
 zstyle ':completion:*' menu select=5
 #bindkey -M menuselect '^o' accept-and-infer-next-history # doesn't work for some reason
-zstyle ':completion:*' urls ~/.zshrc/urls
+zstyle ':completion:*' urls ~/.zsh/urls
 
 setopt auto_list list_ambiguous list_packed
 #setopt correct complete_aliases complete_in_word alwaystoend
