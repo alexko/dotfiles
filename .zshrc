@@ -140,4 +140,5 @@ umask 0027
 if [ "$TERM" != "dumb" ]; then
   [ -x /usr/bin/calendar ] && /usr/bin/calendar
   [ -r ~/bin/z.sh ] && source ~/bin/z.sh && HOME=$(readlink -f $HOME)
+  [ -r /etc/zsh_command_not_found ] && source /etc/zsh_command_not_found
 fi
