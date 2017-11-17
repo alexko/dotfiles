@@ -1,0 +1,7 @@
+bind-key   -n S-Up source ~/.tmux.conf\; display "Reloaded conf."
+unbind-key -n S-Down
+unbind-key -n S-Left
+unbind-key -n S-Right
+unbind-key -n C-Left
+unbind-key -n C-Right
+display "Rxvt tabs disabled."

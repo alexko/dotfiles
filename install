@@ -2,7 +2,7 @@
 
 git submodule update --init .zsh .vim z
 
-for f in .profile .shrc .bashrc .inputrc .zshrc .tmux.conf .screenrc .vim .vim/.vimrc .calendar .emacs.d; do
+for f in .profile .shrc .bashrc .inputrc .zshrc .tmux.conf .tmux_urxvt_tabs .screenrc .vim .vim/.vimrc .calendar .emacs.d; do
   fn=$(basename $f)
   fl=$(readlink -f ~/$fn)
   [ "$fl" = "$(pwd)/$f" ] || [ ! -r "$f" ] || {
