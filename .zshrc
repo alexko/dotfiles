@@ -54,7 +54,9 @@ autoload zmv
 alias zmv='noglob zmv -v'
 alias zcp='noglob zmv -vC'
 
-if [ "$TERM" != "dumb" ]; then
+if [ "$TERM" = "dumb" ]; then
+  unset zle_bracketed_paste # stop adding \33[?2004h after prompt
+else
   if [ -n "$LS_COLORS" ]; then
     zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
   fi
