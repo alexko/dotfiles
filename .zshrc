@@ -1,35 +1,21 @@
-#!/usr/bin/env zsh
+[ -r ~/.sh_debug ] && ~/.sh_debug .zshrc 
+
+# common to all shells
+[ -r ~/.shrc ] && . ~/.shrc # common rc file
+
+# umask 0027 # in .profile
+# stty -ixon # disable Ctrl-S/Ctrl-Q, is it the default?
+# [ "$TERM" = "dumb" ] || export TERM=xterm-256color
+# path=(~/bin ~/.local/bin /usr/local/cuda/bin /usr/local/go/bin ~/android/android-sdk-linux_86 ~/bin/gsutil ~/google_appengine $JAVA_HOME/bin $path)
+# should path be exported?
+# export LUA_INIT=@$HOME/bin/init.lua # only for interactive use => aliases
+
+# specific to zsh
 
 HISTFILE=~/.histfile
 HISTSIZE=30000
 SAVEHIST=30000
-bindkey -e
-bindkey " " magic-space # history expansion on space
-bindkey '\eH' run-help
-bindkey '\e[A' up-line-or-search
-bindkey '\e[B' down-line-or-search
-# make home, end, and del work in archlinux and freebsd
-bindkey '\eOH' beginning-of-line
-bindkey '\eOF' end-of-line
-bindkey '\e[3~' delete-char
-# make home, end work in console
-bindkey '\e[1~' beginning-of-line
-bindkey '\e[4~' end-of-line
-
-stty -ixon # disable Ctrl-S/Ctrl-Q
-path=(~/bin ~/.local/bin /usr/local/cuda/bin ~/android/android-sdk-linux_86 ~/bin/gsutil $JAVA_HOME/bin ~/google_appengine /usr/local/go/bin $path)
 fpath=(~/.zsh $fpath)
-# End of lines configured by zsh-newuser-install
-# The following lines were added by compinstall
-zstyle :compinstall filename ~/.zshrc
-
-autoload -Uz compinit
-compinit
-# End of lines added by compinstall
-zstyle ':completion:*' verbose yes
-zstyle ':completion:*' menu select=5
-#bindkey -M menuselect '^o' accept-and-infer-next-history # doesn't work for some reason
-zstyle ':completion:*' urls ~/.zsh/urls
 
 setopt auto_list list_ambiguous list_packed
 #setopt correct complete_aliases complete_in_word alwaystoend
@@ -41,25 +27,37 @@ setopt append_history # share_history
 setopt extended_glob # enables ^x x~y x# x##
 setopt extended_history
 
-if [ "$TERM" != "dumb" ]; then
-  export TERM=xterm-256color
-  if [ -x /usr/bin/dircolors ]; then
-    eval "$(dircolors)"
-    alias ls='ls -F --color=auto'
-    alias grep='grep --color=auto'
-    zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
-  else
-    export CLICOLOR=1 # for bsd
-    export LSCOLORS=ExFxcxdxbxegedabagacad
-    # export LSCOLORS=exfxcxdxbxegedabagacad
-  fi
-  if [ -x /usr/bin/lesspipe ]; then
-    eval "$(lesspipe)" # http://www.cyberciti.biz/tips/less-is-more-the-hidden-treasure-of-less-command.html
-  fi
+bindkey -e
+bindkey " " magic-space # history expansion on space
+bindkey '\eH' run-help
+bindkey '\e[A' up-line-or-search
+bindkey '\e[B' down-line-or-search
+bindkey '\e[5~' history-beginning-search-backward
+bindkey '\e[6~' history-beginning-search-forward
+# make home, end, and del work in archlinux and freebsd
+bindkey '\eOH' beginning-of-line
+bindkey '\eOF' end-of-line
+bindkey '\e[3~' delete-char
+# make home, end work in console
+bindkey '\e[1~' beginning-of-line
+bindkey '\e[4~' end-of-line
+#bindkey -M menuselect '^o' accept-and-infer-next-history # doesn't work for some reason
 
-  autoload zmv
-  alias zmv='noglob zmv -v'
-  alias zcp='noglob zmv -vC'
+zstyle :compinstall filename ~/.zshrc
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*' menu select=5
+zstyle ':completion:*' urls ~/.zsh/urls
+autoload -Uz compinit
+compinit
+
+autoload zmv
+alias zmv='noglob zmv -v'
+alias zcp='noglob zmv -vC'
+
+if [ "$TERM" != "dumb" ]; then
+  if [ -n "$LS_COLORS" ]; then
+    zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+  fi
 
   autoload edit-command-line
   zle -N edit-command-line
@@ -79,67 +77,21 @@ if [ "$TERM" != "dumb" ]; then
   local prompt_cwd="$c_lwhite%40<..<%~%<<$c_none"
   local prompt_time="$c_blue%*$c_none"
   local prompt_ecode="%(?..$c_lred%?$c_none )"
+  local prompt_chroot="${debian_chroot:+($debian_chroot)}"
  
-#  PROMPT="$prompt_host:$prompt_cwd %# "
-  PROMPT="$prompt_user%B@%b$prompt_host:$prompt_cwd %# "
+  # PROMPT="$prompt_host:$prompt_cwd %# "
+  PROMPT="$prompt_chroot$prompt_user%B@%b$prompt_host:$prompt_cwd %# "
   RPROMPT="$prompt_ecode$prompt_time"
-fi
 
-export LUA_INIT=@$HOME/bin/init.lua
-export PAGER="less -R"
-export EDITOR=vim
-export LESS=-i # ignore case in less searches
-export JAVA_HOME=/usr/lib/jvm/java-6-sun
-#export PATH=$PATH:/usr/local/cuda/bin:$JAVA_HOME/bin:$HOME/android/android-sdk-linux_86:$HOME/bin/gsutil
-if [ -d /usr/local/cuda ]; then
-  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/lib
-fi
-if [ -d $HOME/gsutil/boto ]; then
-  export PYTHONPATH=$PYTHONPATH:$HOME/gsutil/boto
-fi
-export PYLEARN2_DATA_PATH=$HOME/pylearn2/data
-export GOPATH=$HOME/tmp/go
-export COMPUTE=:0
-export alexko=1329486
-unset http_proxy
+  case "$TERM" in
+      xterm*|rxvt*) precmd () {print -Pn "\e]0;%n@%m: %~\a"} ;;
+  esac
 
-# aliases
-alias ll='ls -l'
-alias la='ls -A'
-alias lr='ls -ltr'
-alias l='ls -CF'
-alias g=grep
-alias m=make
-alias e='emacs -nw'
-alias gvim='gvim --remote-tab-silent'
-alias tf='tail -F'
-alias hogs='ps aux --sort=-resident | head'
-alias -g G='| grep'
-alias -g L='| less'
-alias -g W='| wc -l'
-alias -g N='>/dev/null'
-alias -s mp3='mpg123 -q'
-for ext in doc xls pdf epub djvu; do alias -s $ext=gnome-open; done
-for ext in jpeg jpg png gif tiff; do alias -s $ext=eog; done
-for ext in flv mp4; do alias -s $ext='mplayer -quiet'; done
+  WATCH=all
 
-ec () emacsclient -a $EDITOR "$@"
-ec_remember () emacsclient -e '(remember-other-frame)'
-ec_start () { emacs --daemon && ec -c & disown }
-ec_stop () emacsclient --eval "(kill-emacs)"
-alias xml=xmlstarlet
-alias adb="~/android/android-sdk-linux/platform-tools/adb -d"
-function dupscreen { screen bash -c "cd \"$PWD\" && exec $SHELL --login" }
-alias ,d=dupscreen
-alias relcom='f=(~/.zsh/*(.)); unfunction $f:t; autoload -U ~/.zsh/*(:t)'
-alias pylab='ipython -pylab'
-
-umask 0027
-
-[ -r ~/.zshrc.local ] && source ~/.zshrc.local
-if [ "$TERM" != "dumb" ]; then
-  [ -x /usr/bin/calendar ] && /usr/bin/calendar
   [ -r ~/bin/z.sh ] && source ~/bin/z.sh && HOME=$(readlink -f $HOME)
   [ -r /etc/zsh_command_not_found ] && source /etc/zsh_command_not_found
   source /usr/share/doc/pkgfile/command-not-found.zsh 2>/dev/null # arch
 fi
+
+[ -r ~/.zshrc.local ] && source ~/.zshrc.local

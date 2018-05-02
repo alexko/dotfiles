@@ -1,0 +1,155 @@
+# .shrc - bourne shell startup file 
+#
+# This file will be used if the shell is invoked for interactive use and
+# the environment variable ENV is set to this file.
+[ -r ~/.sh_debug ] && ~/.sh_debug .shrc
+[ -z "$PS1" ] && return # If not running interactively, don't do anything
+
+set -o emacs
+color_prompt=yes
+# CDPATH=.:$HOME
+# PATH and other exports are moved to .profile, except LUA_INIT
+export LUA_INIT=@$HOME/bin/init.lua
+# export PSSYSFORMAT=DefBSD
+
+if [ "$TERM" = "dumb" ]; then
+  export PAGER=/bin/cat
+else
+  # case "$COLORTERM" in # can't detect color xterm, it doesn't set this var
+  #   rxvt-xpm)                      export TERM=rxvt-256color;  tput init;;
+  #   gnome-terminal|xfce4-terminal) export TERM=xterm-256color; tput init;;
+  # esac
+  case "$TERM" in
+    *color) ;; 
+    xterm*)  export TERM=xterm-256color; tput init;;
+    rxvt*)   export TERM=rxvt-256color;  tput init;;
+    *)       color_prompt=no;;
+  esac
+
+  if [ -x /usr/bin/tput ]; then
+    if tput setaf 1 >/dev/null; then # tput uses terminfo (debian/ubuntu)
+      setaf=setaf resetaf=sgr0
+    else                             # tput uses termcap (e.g. fbsd)
+      setaf=AF resetaf=me
+    fi
+    p_u="$(tput $setaf 10)" p_h="$(tput $setaf 11)" p_w="$(tput $setaf 15)"
+    p_n="$(tput $resetaf)"
+    unset setaf resetaf
+  else # no tput, e.g. busybox
+    p_u="[01;32m" p_h="[01;33m" p_w="[01;37m" p_n="[00m"
+  fi
+fi
+if [ "$color_prompt" != yes ]; then
+  unset p_u p_h p_w p_n
+fi
+
+if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
+    p_chr="${debian_chroot:+($debian_chroot) }"
+fi
+[ ${#PS1} -le 2 ] && case "$(ls -l /bin/sh)" in
+*dash*)
+  p_user="$(whoami)" p_host="$(hostname | sed 's/\..*//')"
+  p_ttl="$p_chr$p_user@$p_host: \$(echo \$PWD | sed 's|$HOME|~|')"
+  PS1="$p_chr$p_u$p_user$p_n@$p_h$p_host$p_n: $p_w\$(echo \$PWD | sed 's|$HOME|~|')$p_n \\$ "
+  PS1="$p_ttl \\$ " p_ttl= # rlfe wrapper is confused by esc sequences
+  ;;
+*busybox*)
+  p_ttl="\u@\h: \w"
+  PS1="$p_chr$p_u\u$p_n@$p_h\h$p_n:$p_w\w$p_n \\$ " ;;
+# *zsh*)
+#   p_ttl="%n@%m: %~"
+#   PS1="$p_chr$p_u%n$p_n@$p_h%m$p_n: $p_w%~$p_n%# " ;;
+# *bash*)
+#   p_ttl="\u@\h: \w"
+#   PS1="$p_chr$p_u\u$p_n@$p_h\h$p_n: $p_w\w$p_n\\$ " ;;
+*)
+  p_user="$(whoami)"
+  p_ttl="$p_user@\h: \w"
+  PS1="$p_uc$p_user$p_n@$p_h\h$p_n:$p_w\w$p_n \\$ " ;; # /bin/sh in fbsd
+esac
+case "$TERM" in
+  xterm*|rxvt*) [ -n "$p_ttl"] && PS1="]0;$p_ttl$PS1";;
+esac
+# http://tldp.org/HOWTO/Xterm-Title-3.html
+# unset p_u p_h p_w p_n
+# [ -f ~/.sh_aliases ] && . ~/.sh_aliases
+# aliases and functions common to sh, bash, and zsh
+
+if [ -x /usr/bin/dircolors ]; then
+  [ -r ~/.dircolors ] && eval "$(dircolors -b ~/.dircolors)" \
+      || eval "$(dircolors -b)"
+  # eval "$(dircolors)"
+  alias ls='ls -F --color=auto'
+  alias dir='dir --color=auto'
+  alias vdir='vdir --color=auto'
+  alias grep='grep --color=auto'
+  alias fgrep='fgrep --color=auto'
+  alias egrep='egrep --color=auto'
+else
+  export CLICOLOR=1 # for bsd
+  export LSCOLORS=ExFxcxdxbxegedabagacad
+  # export LSCOLORS=exfxcxdxbxegedabagacad
+fi
+
+alias ll='ls -laFo'
+alias la='ls -A'
+alias lr='ls -ltr'
+alias l='ls -CF'
+# alias m="$PAGER"
+alias m=make
+alias j=jobs
+alias g="grep -i"
+alias e='emacs -nw'
+alias tf='tail -F'
+alias h='fc -l'
+alias r='fc -s'
+alias o=xdg-open
+alias hh=history
+alias xml=xmlstarlet
+alias gvim='gvim --remote-tab-silent'
+alias hogs='ps aux --sort=-resident | head'
+alias adb='~/android/android-sdk-linux/platform-tools/adb -d'
+alias pylab='ipython -pylab'
+alias path='echo $PATH | sed "s|$HOME|~|g"'
+alias watch='watch ' # allow to use watch <alias>
+alias nohup='nohup '
+alias lua='env LUA_INIT=@$HOME/bin/init.lua lua'
+alias ec='emacsclient -a $EDITOR'
+alias ec_remember='emacsclient -e ''(remember-other-frame)'''
+alias ec_start='emacs --daemon && ec -c & disown'
+alias ec_stop='emacsclient --eval ''(kill-emacs)'''
+which rlfe >/dev/null && alias ilua='rlfe ilua'
+grep -q Ubuntu /etc/issue 2>/dev/null &&
+  which rlfe >/dev/null && alias sh='rlfe sh' # gets confused by ansi seq
+# alias sh='rlwrap -c sh' # is another alternative, but can't handle C-c
+
+# these are now aliases
+#ec () emacsclient -a $EDITOR "$@"
+#ec_remember () emacsclient -e '(remember-other-frame)'
+#ec_start () { emacs --daemon && ec -c & disown }
+#ec_stop () emacsclient --eval "(kill-emacs)"
+# ? () { echo "$*" | bc -l; }
+# dupscreen () { screen sh -c "cd \"$PWD\" && exec $SHELL --login"; }
+# alias ,d=dupscreen
+
+if [ -n "$ZSH_VERSION" ]; then
+  alias -g G='| grep -i'
+  alias -g L='| less'
+  alias -g W='| wc -l'
+  alias -g N='>/dev/null'
+  alias -s mp3='mpg123 -q'
+  alias relcom='f=(~/.zsh/*(.)); unfunction $f:t; autoload -U ~/.zsh/*(:t)'
+  for ext in doc xls pdf epub djvu; do alias -s $ext=gnome-open; done
+  for ext in jpeg jpg png gif tiff; do alias -s $ext=eog; done
+  for ext in flv mp4; do alias -s $ext='mplayer -quiet'; done
+fi
+
+# make less more friendly for non-text input files, see lesspipe(1)
+# [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+[ -x /usr/bin/lesspipe ] && eval "$(lesspipe)"
+[ -x /usr/bin/calendar ] && /usr/bin/calendar
+[ -x /usr/games/fortune ] && case $(uname) in
+Linux)   /usr/games/fortune -e debian-hints ubuntu-server-tips ~/.fortune;;
+FreeBSD) /usr/games/fortune -e freebsd-tips ~/.fortune;;
+esac
